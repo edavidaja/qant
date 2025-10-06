@@ -1,0 +1,9 @@
+title: qant
+author: E. David Aja
+version: 0.1.0
+quarto-required: ">=1.6.0"
+contributes:
+  metadata:
+    project:
+      pre-render: qant.lua
+
