@@ -42,7 +42,7 @@ local function validate_categories(inspect_data, allowed_categories)
   local violations = {}
 
   -- Iterate through all files in the inspect data
-  for filepath, filedata in pairs(inspect_data.files) do
+  for filepath, filedata in pairs(inspect_data.fileInformation) do
     if filedata.metadata and filedata.metadata.categories then
       local doc_categories = filedata.metadata.categories
 

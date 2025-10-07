@@ -1,11 +1,8 @@
-// qant: Categorical imperative for Quarto categories
 // Validates document categories against a centralized allow-list
 
-// Import YAML parser from Deno stdlib
-import { parse as parseYaml } from "https://deno.land/std@0.217.0/yaml/mod.ts";
-
+import { parse } from "stdlib/yaml";
 interface InspectData {
-  files: {
+  fileInformation: {
     [filepath: string]: {
       metadata?: {
         categories?: string[];
@@ -26,7 +23,7 @@ interface Violation {
 function readAllowedCategories(): Set<string> | null {
   try {
     const content = Deno.readTextFileSync("_qant.yml");
-    const config = parseYaml(content) as QantConfig;
+    const config = parse(content) as QantConfig;
 
     if (!config.categories || !Array.isArray(config.categories)) {
       console.warn("Warning: _qant.yml does not contain a valid 'categories' array.");
@@ -67,7 +64,7 @@ function validateCategories(
 ): Violation[] {
   const violations: Violation[] = [];
 
-  for (const [filepath, filedata] of Object.entries(inspectData.files)) {
+  for (const [filepath, filedata] of Object.entries(inspectData.fileInformation)) {
     if (filedata.metadata?.categories) {
       for (const category of filedata.metadata.categories) {
         if (!allowedCategories.has(category)) {
@@ -80,7 +77,6 @@ function validateCategories(
   return violations;
 }
 
-// Main execution
 const allowed = readAllowedCategories();
 
 if (allowed) {
